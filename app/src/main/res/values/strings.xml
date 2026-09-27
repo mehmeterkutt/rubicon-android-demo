@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Rubicon</string>
+    <string name="title_events">Events</string>
+    <string name="title_identity">Identity</string>
+    <string name="title_diagnostics">Diagnostics</string>
+    <string name="title_settings">Settings</string>
+</resources>
