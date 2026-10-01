@@ -216,8 +216,8 @@ private fun Validation(analytics: Analytics) {
         Case("Bad keys", "A blank key and a nested map with a number as key") {
             analytics.track("Bad Keys", mapOf(" " to 1, "nested" to mapOf(1 to "x", "ok" to 2), "kept" to true))
         }
-        Case("Nesting deeper than 3", "The fourth level is dropped") {
-            analytics.track("Too Deep", mapOf("a" to mapOf("b" to mapOf("c" to mapOf("d" to "too deep")))))
+        Case("Nesting deeper than 3", "Three maps inside a property are allowed; the fourth is dropped, so c arrives empty") {
+            analytics.track("Too Deep", mapOf("a" to mapOf("b" to mapOf("c" to mapOf("d" to mapOf("e" to "too deep"))))))
         }
         Case("A string over 1024 characters", "Cut at 1024 on a code point, WARN, never throws") {
             analytics.track("Long Text", mapOf("text" to "é".repeat(1500)))
@@ -292,6 +292,12 @@ private fun Hooks(
                 Calls.run("Tracked Signed Up") { analytics.track("Signed Up", mapOf("email" to "ada@example.com", "plan" to "pro")) }
             }) { Text("Event with email") }
         }
-        Expect("Debug Event: dropped as before_send. Hook Test: dropped (a throwing hook fails closed). Email: the value arrives as ***.")
+        Expect(
+            listOf(
+                if (HookPreset.DROP_DEBUG_EVENTS in active) "Debug Event: dropped as before_send." else "Debug Event: sent (its hook is off).",
+                if (HookPreset.THROW_ON_HOOK_TEST in active) "Hook Test: dropped, a throwing hook fails closed." else "Hook Test: sent (turn on \"Throw on Hook Test\" in Settings).",
+                if (HookPreset.MASK_EMAIL in active) "Email: the value arrives as ***." else "Email: sent as is (its hook is off).",
+            ).joinToString(" "),
+        )
     }
 }

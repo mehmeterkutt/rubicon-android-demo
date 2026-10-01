@@ -81,10 +81,15 @@ fun SettingsScreen(modifier: Modifier = Modifier) {
 
         SectionCard("Flushing and sessions", "Queue 3, Session 4.") {
             Field("flush.at", s.flushAt.toString(), supporting = "1 to 100; outside is clamped with a WARN") { s = s.copy(flushAt = it.toIntOrNull() ?: s.flushAt) }
+            ChoiceChips(listOf(1, 30, 100), s.flushAt, { "at $it" }) { s = s.copy(flushAt = it) }
             Field("flush.intervalMs", s.flushIntervalMs.toString(), supporting = "1000 to 600000") { s = s.copy(flushIntervalMs = it.toLongOrNull() ?: s.flushIntervalMs) }
+            ChoiceChips(listOf(1_000L, 60_000L, 600_000L), s.flushIntervalMs, { "every ${it / 1000} s" }) { s = s.copy(flushIntervalMs = it) }
             Field("flush.immediateEvents", immediate, supporting = "Comma separated event names") { immediate = it }
             Field("session.backgroundTimeoutMs", s.sessionTimeoutMs.toString(), supporting = "10000 to 7200000") {
                 s = s.copy(sessionTimeoutMs = it.toLongOrNull() ?: s.sessionTimeoutMs)
+            }
+            ChoiceChips(listOf(10_000L, 60_000L, 300_000L), s.sessionTimeoutMs, { "timeout ${if (it < 60_000) "${it / 1000} s" else "${it / 60_000} min"}" }) {
+                s = s.copy(sessionTimeoutMs = it)
             }
         }
 
