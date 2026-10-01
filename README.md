@@ -36,6 +36,8 @@ With `debug` on, the SDK throws on a developer's mistake; the app shows the exce
 instead of crashing, except where a hook breaks the rules on the SDK's own thread, which crashes on
 purpose.
 
+The manual checklist run before every release is in [`docs/manual-checklist.md`](docs/manual-checklist.md).
+
 ## Fake backend
 
 `fake-server/server.py`, standard library only; its docstring lists every endpoint.
