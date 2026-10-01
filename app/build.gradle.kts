@@ -14,8 +14,9 @@ android {
         applicationId = "com.rubicon.demo"
         minSdk = 24
         targetSdk = 36
-        versionCode = 1
-        versionName = "0.1"
+        // -PdemoVersionCode=2 builds a higher version to install over this one (Application Updated).
+        versionCode = providers.gradleProperty("demoVersionCode").getOrElse("1").toInt()
+        versionName = "0.$versionCode"
     }
 
     buildTypes {
@@ -42,15 +43,16 @@ kotlin {
 }
 
 dependencies {
-    // Later: implementation(project(":sdk-android"))
+    implementation(libs.rubicon.sdk.android)
+    implementation(libs.okhttp)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.lifecycle.process)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.compose.bom))
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.tooling.preview)
     implementation(libs.compose.material3)
+    implementation(libs.compose.material.icons.extended)
     implementation(libs.androidx.navigation.compose)
     debugImplementation(libs.compose.ui.tooling)
 }
