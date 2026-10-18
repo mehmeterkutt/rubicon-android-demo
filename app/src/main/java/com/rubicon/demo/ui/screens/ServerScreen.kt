@@ -155,7 +155,7 @@ private fun RemoteConfig(
     var current by remember { mutableStateOf("…") }
 
     fun load(json: JSONObject?) {
-        current = json?.toString(2) ?: "none (the server answers 404)"
+        current = json?.toString(2)?.unslash() ?: "none (the server answers 404)"
         enabled = json?.optBoolean("enabled", true) ?: true
         off = json?.optJSONArray("autocapture_off")?.let { a -> (0 until a.length()).mapNotNull { i -> Autocapture.entries.find { it.name.lowercase() == a.getString(i) } }.toSet() } ?: emptySet()
         flushAt = json?.opt("flush_at")?.toString().orEmpty()
@@ -248,8 +248,8 @@ private fun ReceivedEvents(backend: FakeBackend) {
                     Text(event.label, style = MaterialTheme.typography.titleSmall, modifier = Modifier.weight(1f))
                     Text("#${event.index}", style = MaterialTheme.typography.labelSmall)
                 }
-                Text(event.type + " · " + event.json.optJSONObject("properties")?.toString()?.take(120).orEmpty(), style = MaterialTheme.typography.bodySmall)
-                if (open == event.index) Text(event.json.toString(2), style = Mono, modifier = Modifier.padding(top = 6.dp))
+                Text(event.type + " · " + event.json.optJSONObject("properties")?.toString()?.unslash()?.take(120).orEmpty(), style = MaterialTheme.typography.bodySmall)
+                if (open == event.index) Text(event.json.toString(2).unslash(), style = Mono, modifier = Modifier.padding(top = 6.dp))
             }
         }
     }
@@ -277,3 +277,6 @@ private fun Requests(backend: FakeBackend) {
         }
     }
 }
+
+// org.json escapes every slash; the JSON is the same without, and easier to read.
+private fun String.unslash(): String = replace("\\/", "/")
