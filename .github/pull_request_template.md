@@ -8,4 +8,4 @@
 
 ## References
 
-<!-- Confluence page, issue, or design decision this implements. -->
+<!-- Issue or design decision this implements. -->

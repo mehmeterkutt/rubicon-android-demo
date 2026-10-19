@@ -1,8 +1,7 @@
 # Rubicon demo app
 
 Android host app used to exercise the Rubicon analytics SDK by hand and in instrumented tests. The SDK
-itself lives in its own repository; its design decisions are in Confluence (Software Development >
-Analytics SDK Design Decisions). This repository holds only the app and a fake backend.
+itself lives in its own repository, together with its design decisions. This repository holds only the app and a fake backend.
 
 ## Layout
 
